@@ -1,2 +1,5 @@
 .next
 node_modules
+
+# Netlify build
+out_*
