@@ -32,11 +32,6 @@ jobs:
       - name: 📦 Build project
         run: npm run build --if-present
     
-      - uses: jsmrcaga/action-netlify-deploy@v2.0.0
-        with:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.MY_TOKEN_SECRET }}
-          NETLIFY_DEPLOY_TO_PROD: true
-
       - name: 🚀 Deploy to Netlify
         id: deploy-netlify
         uses: netlify/actions/cli@master
