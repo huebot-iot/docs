@@ -1,11 +1,12 @@
 {
-  "name": "nextra-docs-template",
+  "name": "huebot-docs",
   "version": "0.0.1",
   "description": "Nextra docs template",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "export": "next export"
   },
   "repository": {
     "type": "git",
