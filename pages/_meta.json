@@ -1,8 +1,6 @@
 {
   "index": "Introduction",
-  "hub-setup": "Hub Setup",
-  "node-setup": "Node Setup",
-  "cli": "CLI",
-  "rest-api": "REST API",
-  "development": "Development"
+  "hub": "Hub",
+  "node": "Node",
+  "example": "Example"
 }
