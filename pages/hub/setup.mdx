@@ -1,3 +1,82 @@
 # Hub Setup
 
-To Do!
+## Getting Started
+
+**Node 16+ is required. Make sure it is installed before proceeding.**
+
+SSH into the hub and run the following commands.
+
+1. Install the CLI
+``` {3} copy
+npm install -g @huebot/cli
+```
+
+2. Install the Huebot environment
+``` {3} copy
+huebot install
+```
+
+3. Create an admin user (required for the REST API)
+``` {3} copy
+huebot create-admin
+```
+
+Your hub is setup! Now [test the REST API](/hub/setup#test-rest-api) to confirm connectivity.
+
+## Test REST API
+
+Feel free to use an API platform like [Postman](https://www.postman.com/) to speak to the API or just run the below in a terminal!
+
+1. Login 
+
+``` {3} copy
+curl -X POST http://[computer name OR IP address]/user/login \
+   -H "Content-Type: application/json" \
+   -d '{"username": "my_username", "password": "my_password"}'
+```
+
+If successful, this request should return an access token and refresh token. You'll use the access token in the next command.
+
+2. Get current user
+
+``` {3} copy
+curl http://[computer name OR IP address]/user/me \
+   -H "Content-Type: application/json" \
+   -H "Authorization: Bearer [access token]" 
+```
+
+## Development
+
+Using a single-board computer like a Raspberry Pi is not recommended for development. The extra dependencies along with [webpack's](https://github.com/webpack/webpack) Hot-Module Replacement (HMR) can be too much to handle. We suggest using a PC or [Virtual Box](https://www.virtualbox.org/) running [Ubuntu Server](https://ubuntu.com/download/server). 
+
+[Yarn V2](https://yarnpkg.com/getting-started/install) is required for Huebot development. Make sure it's installed before running the below commands.
+
+1. Clone the repo
+
+``` {3} copy
+git clone https://github.com/huebot-iot/huebot.git
+```
+
+2. Install the dependencies
+
+``` {3} copy
+cd huebot && yarn
+```
+
+3. Build the common package
+
+``` {3} copy
+yarn workspace @huebot/common build
+```
+
+3. Make environment variables available - either create a new `.env` file in the `docker` directory or create a soft symlink to the variables that were configured when you ran `huebot install` 
+
+``` {3} copy
+ln -s /usr/local/bin/huebot/.env /home/[username]/huebot/docker/.env
+```
+
+4. Start the Docker containers (Note: Make sure you've stopped the production API and MQTT containers)
+
+``` {3} copy
+docker compose -f docker/docker-compose.dev.yml up
+```

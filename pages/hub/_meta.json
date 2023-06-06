@@ -1,5 +1,5 @@
 {
   "setup": "Setup",
-  "rest-api": "REST API",
+  "api-endpoints": "API Endpoints",
   "cli": "CLI"
 }

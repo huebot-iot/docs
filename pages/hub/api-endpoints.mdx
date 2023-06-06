@@ -1,0 +1,265 @@
+# Hub API Endpoints
+
+## User
+
+<details>
+ <summary><code>POST</code>&nbsp;<code><b>/user/create</b></code>&nbsp;<code>(Creates a new user)</code></summary>
+
+<b />
+**Parameters**
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `username`        |  required | string         | Must be unique                      |
+> | `password`        |  required | string         | Min 8 characters                    |
+> | `role`            |  required | string         | `admin` or `operator`               |
+
+<b />
+**Headers**
+
+> | Content-Type        |  Authorization         |
+> |---------------------|------------------------|
+> | `application/json`  | `Bearer [access token]` |
+
+<b />
+**Responses**
+
+> | http code     | content-type                      | response                                                                           |
+> |---------------|-----------------------------------|------------------------------------------------------------------------------------|
+> | `201`         | `N/A`                             | `void`                                                                             |
+> | `400`         | `application/json`                | `{"statusCode":400,"message":"Username '[username]' is already in use"}`           |
+> | `400`         | `application/json`                | `{"statusCode":400,"message":"Unsupported role provided: [role]"}`                 |
+> | `400`         | `application/json`                | `{"statusCode":400,"message":"Users with 'admin' role must be created via CLI"}`   |
+> | `403`         | `application/json`                | `{"statusCode":403,"message":"Forbidden"}`                                         |
+
+<b />
+**Example cURL**
+
+> ```javascript
+>  curl -X POST http://[computer name OR IP address]/user/create \
+>  -H "Content-Type: application/json" \
+>  -H "Authorization: Bearer [access token]" \
+>  -d '{"username": "my_username", "password": "my_password", "role": "my_role" }'
+> ```
+</details>
+
+
+<details>
+ <summary><code>POST</code>&nbsp;<code><b>/user/login</b></code>&nbsp;<code>(Login as user)</code></summary>
+
+<b />
+**Parameters**
+
+> | name              |  type     | data type      |
+> |-------------------|-----------|----------------|
+> | `username`        |  required | string         |
+> | `password`        |  required | string         |
+
+<b />
+**Responses**
+
+> | http code     | content-type                      | response                                                                           |
+> |---------------|-----------------------------------|------------------------------------------------------------------------------------|
+> | `201`         | `application/json`                | `{"accessToken": "[token]","refreshToken":"[token]"}`                              |
+> | `400`         | `application/json`                | `{"statusCode":400,"message":"Invalid username or password!"}`                     |
+
+
+<b />
+**Example cURL**
+
+> ```javascript
+>  curl -X POST http://[computer name OR IP address]/user/login \
+>  -H "Content-Type: application/json" \
+>  -d '{"username": "my_username", "password": "my_password" }'
+> ```
+</details>
+
+<details>
+ <summary><code>GET</code>&nbsp;<code><b>/user/me</b></code>&nbsp;<code>(Returns currently logged in user)</code></summary>
+
+<b />
+**Headers**
+
+> | Content-Type        |  Authorization          |
+> |---------------------|-------------------------|
+> | `application/json`  | `Bearer [access token]` |
+
+<b />
+**Responses**
+
+> | http code     | content-type                      | response                                      |
+> |---------------|-----------------------------------|-----------------------------------------------|
+> | `201`         | `application/json`                | `User Object`                                 |
+> | `403`         | `application/json`                | `{"statusCode":403,"message":"Forbidden"}`    |
+
+
+<b />
+**Example cURL**
+
+> ```javascript
+>  curl -X GET http://[computer name OR IP address]/user/me \
+>  -H "Content-Type: application/json" \
+>  -H "Authorization: Bearer [access token]"
+> ```
+</details>
+
+<details>
+<summary><code>POST</code>&nbsp;<code><b>/user/logout</b></code>&nbsp;<code>(Logout current user)</code></summary>
+
+<b />
+**Headers**
+
+> | Content-Type        |  Authorization          |
+> |---------------------|-------------------------|
+> | `application/json`  | `Bearer [access token]` |
+
+<b />
+**Responses**
+
+> | http code     | content-type                      | response                                      |
+> |---------------|-----------------------------------|-----------------------------------------------|
+> | `201`         | `application/json`                | `void`                                        |
+> | `403`         | `application/json`                | `{"statusCode":403,"message":"Forbidden"}`    |
+
+
+<b />
+**Example cURL**
+
+> ```javascript
+>  curl -X POST http://[computer name OR IP address]/user/logout \
+>  -H "Content-Type: application/json" \
+>  -H "Authorization: Bearer [access token]"
+> ```
+</details>
+
+<details>
+ <summary><code>GET</code>&nbsp;<code><b>/user/refresh</b></code>&nbsp;<code>(Returns refreshed access tokens)</code></summary>
+
+<b />
+**Headers**
+
+> | Content-Type        |  Authorization          |
+> |---------------------|-------------------------|
+> | `application/json`  | `Bearer [refresh token]` |
+
+<b />
+**Responses**
+
+> | http code     | content-type                      | response                                               |
+> |---------------|-----------------------------------|--------------------------------------------------------|
+> | `201`         | `application/json`                | `{"accessToken": "[token]","refreshToken":"[token]"}`  |
+> | `403`         | `application/json`                | `{"statusCode":403,"message":"Forbidden"}`             |
+
+<b />
+**Example cURL**
+
+> ```javascript
+>  curl -X GET http://[computer name OR IP address]/user/refresh \
+>  -H "Content-Type: application/json" \
+>  -H "Authorization: Bearer [refresh token]"
+> ```
+</details>
+
+
+## Node
+
+<details>
+<summary><code>GET</code>&nbsp;<code><b>/node/online</b></code>&nbsp;<code>(Returns connected client IDs)</code></summary>
+
+<b />
+**Headers**
+
+> | Content-Type        |  Authorization          |
+> |---------------------|-------------------------|
+> | `application/json`  | `Bearer [access token]` |
+
+<b />
+**Responses**
+
+> | http code     | content-type                      | response                                               |
+> |---------------|-----------------------------------|--------------------------------------------------------|
+> | `201`         | `application/json`                | `[client IDs]`                                         |
+> | `403`         | `application/json`                | `{"statusCode":403,"message":"Forbidden"}`             |
+
+<b />
+**Example cURL**
+
+> ```javascript
+>  curl -X GET http://[computer name OR IP address]/node/online \
+>  -H "Content-Type: application/json" \
+>  -H "Authorization: Bearer [access token]"
+> ```
+</details>
+
+<details>
+<summary><code>POST</code>&nbsp;<code><b>/node/send</b></code>&nbsp;<code>(Send MQTT message to topic)</code></summary>
+
+<b />
+**Parameters**
+
+> | name              |  type     | data type      |
+> |-------------------|-----------|----------------|
+> | `topic`           |  required | string         |
+> | `payload`         |  required | string         |
+
+<b />
+**Headers**
+
+> | Content-Type        |  Authorization          |
+> |---------------------|-------------------------|
+> | `application/json`  | `Bearer [access token]` |
+
+<b />
+**Responses**
+
+> | http code     | content-type                      | response                                         |
+> |---------------|-----------------------------------|--------------------------------------------------|
+> | `201`         | `application/json`                | `any`                                            |
+> | `403`         | `application/json`                | `{"statusCode":403,"message":"Forbidden"}`       |
+
+<b />
+**Example cURL**
+
+> ```javascript
+>  curl -X POST http://[computer name OR IP address]/node/send \
+>  -H "Content-Type: application/json" \
+>  -H "Authorization: Bearer [access token]"
+>  -d '{"topic": "mqtt_topic", "payload": "mqtt_payload" }'
+> ```
+</details>
+
+<details>
+<summary><code>GET</code>&nbsp;<code><b>/node/sensor</b></code>&nbsp;<code>(Returns sensor reading if available)</code></summary>
+
+<b />
+**Parameters**
+
+> | name              |  type     | data type      |
+> |-------------------|-----------|----------------|
+> | `client_id`       |  required | string         |
+
+<b />
+**Headers**
+
+> | Content-Type        |  Authorization          |
+> |---------------------|-------------------------|
+> | `application/json`  | `Bearer [access token]` |
+
+<b />
+**Responses**
+
+> | http code     | content-type                      | response                                               |
+> |---------------|-----------------------------------|--------------------------------------------------------|
+> | `201`         | `application/json`                | `string` or `undefined`                                |
+> | `403`         | `application/json`                | `{"statusCode":403,"message":"Forbidden"}`             |
+
+<b />
+**Example cURL**
+
+> ```javascript
+>  curl -X GET http://[computer name OR IP address]/node/sensor \
+>  -H "Content-Type: application/json" \
+>  -H "Authorization: Bearer [access token]"
+>  -d '{"client_id": "client_id" }'
+> ```
+</details>
