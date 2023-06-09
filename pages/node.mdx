@@ -31,19 +31,32 @@ Regardless of board type, you'll need to create the following files in your proj
 ### config.json
 ```json filename="config.json"
 {
-  "client_id": "", // Unique ID identifying device
-  "server": "", // Huebot hub IP address or name (if DNS is configured)
-  "ssid": "", // WiFi network name (must be on same network as hub)
-  "wifi_pw": "", // WiFI network password
-  "port": null, // MQTT broker port on hub (default: 1883)
-  "user": "", // MQTT broker username
-  "password": "", // MQTT broker password
-  "keepalive": null, // Per mqtt_as docs: 'Period (secs) before broker regards client as having died' (default: 10)
-  "ping_interval": null, // Per mqtt_as docs: 'Period (secs) between broker pings' (default: 5)
-  "response_time": null, // Per mqtt_as docs: 'Time in which server is expected to respond' (default: 10)
-  "max_repubs": null // Per mqtt_as docs: 'Maximum no. of republications before reconnection is attempted' (default: 4)
+  "client_id": "",
+  "server": "",
+  "ssid": "",
+  "wifi_pw": "",
+  "port": null,
+  "user": "",
+  "password": "",
+  "keepalive": null,
+  "ping_interval": null,
+  "response_time": null,
+  "max_repubs": null
 }
 ```
+
+#### Properties
+- **client_id** Unique ID identifying device
+- **server** Huebot hub IP address or name (if DNS is configured)
+- **ssid** WiFi network name (must be on same network as hub)
+- **wifi_pw** WiFI network password
+- **port** (default: 1883) MQTT broker port on hub
+- **user** MQTT broker username
+- **password** MQTT broker password
+- **keepalive** (default: 10) Per [mqtt_as](https://github.com/peterhinch/micropython-mqtt/blob/master/mqtt_as/README.md) docs: 'Period (secs) before broker regards client as having died'
+- **ping_interval** (default: 5) Per [mqtt_as](https://github.com/peterhinch/micropython-mqtt/blob/master/mqtt_as/README.md) docs: 'Period (secs) between broker pings'
+- **response_time** (default: 10) Per [mqtt_as](https://github.com/peterhinch/micropython-mqtt/blob/master/mqtt_as/README.md) docs: 'Time in which server is expected to respond'
+- **max_repubs** (default: 4) Per [mqtt_as](https://github.com/peterhinch/micropython-mqtt/blob/master/mqtt_as/README.md) docs: 'Maximum no. of republications before reconnection is attempted'
 
 ### client.py
 ```py filename="client.py"
