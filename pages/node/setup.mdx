@@ -1,0 +1,34 @@
+# Setup
+
+## Supported Devices
+
+### ESP32
+
+1. Download the latest [Huebot node firmware](https://github.com/huebot-iot/node/releases/) (look for `mp-esp32-[version].bin`).
+
+2. Follow MicroPython's [deploying the firmware](https://docs.micropython.org/en/latest/esp32/tutorial/intro.html#deploying-the-firmware) documentation but make sure to use the Huebot firmware you just downloaded.
+
+3. Create a new directory for your custom node and add the necessary [files](/node/files).
+
+4. Upload the files to the ESP32. We use [Visual Studio Code](https://code.visualstudio.com/download) with the [PyMakr extension](https://marketplace.visualstudio.com/items?itemName=pycom.Pymakr) to accomplish this (see PyMakr Configuration for details). Unfortunately this might require some Googling if you use a different code editor.
+
+5. Restart your node and confirm it's online by hitting the [`GET /node/online`](/hub/api-endpoints#node) endpoint.
+
+🎉 Congrats your node is setup and ready to use! 🎉
+
+## Other Devices
+Follow this section to flash your MCU in development mode (access to source files) or if Huebot does not yet provide a [custom MicroPython build](https://github.com/huebot-iot/node/releases/latest) for the device (listed above under Supported Devices).
+
+1. Go to the [MicroPython Downloads](https://micropython.org/download/) page, select your MCU and download the latest firmware release.
+
+2. Follow the [MicroPython installation instructions](https://docs.micropython.org/en/latest/index.html) pertaining to your MCU.
+
+3. Clone the [Huebot node repository](https://github.com/huebot-iot/node) (`git clone https://github.com/huebot-iot/node.git`).
+
+4. In the node directory add the necessary [files](/node/files).
+
+5. Now to upload the files to your MCU. This will take a little Googling as the process will depend on the board type.
+
+6. Restart your node and confirm it's online by hitting the [`GET /node/online`](/hub/api-endpoints#node) endpoint.
+
+🎉 Congrats your node is setup and ready to use! 🎉

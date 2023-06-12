@@ -1,0 +1,72 @@
+# Files
+
+Customize your node's functionality by leveraging the files below. **Note: `config.json` and `client.py` are required files.**
+
+### config.json
+
+```json filename="config.json"
+{
+  "client_id": "",
+  "server": "",
+  "ssid": "",
+  "wifi_pw": "",
+  "port": null,
+  "user": "",
+  "password": "",
+  "keepalive": null,
+  "ping_interval": null,
+  "response_time": null,
+  "max_repubs": null,
+  "debug": true
+}
+```
+
+#### Properties
+- **client_id** Unique ID identifying device
+- **server** Huebot hub IP address or name (if DNS is configured)
+- **ssid** WiFi network name (must be on same network as hub)
+- **wifi_pw** WiFI network password
+- **port** (default: 1883) MQTT broker port on hub
+- **user** MQTT broker username
+- **password** MQTT broker password
+- **keepalive** (default: 10) Per [mqtt_as](https://github.com/peterhinch/micropython-mqtt/blob/master/mqtt_as/README.md) docs: 'Period (secs) before broker regards client as having died'
+- **ping_interval** (default: 5) Per [mqtt_as](https://github.com/peterhinch/micropython-mqtt/blob/master/mqtt_as/README.md) docs: 'Period (secs) between broker pings'
+- **response_time** (default: 10) Per [mqtt_as](https://github.com/peterhinch/micropython-mqtt/blob/master/mqtt_as/README.md) docs: 'Time in which server is expected to respond'
+- **max_repubs** (default: 4) Per [mqtt_as](https://github.com/peterhinch/micropython-mqtt/blob/master/mqtt_as/README.md) docs: 'Maximum no. of republications before reconnection is attempted'
+- **debug** (default `true`) determines logging output
+
+### client.py
+```py filename="client.py"
+from node import NodeCore
+
+class NodeClient(NodeCore):
+    # your code here!
+```
+
+#### Properties
+
+- **client** [[MQTTClient class](https://github.com/peterhinch/micropython-mqtt/blob/master/mqtt_as/README.md#3-mqttclient-class)] access to MQTT client methods (notably `client.publish` and `client.subscribe`).
+- **config** Access to settings in `config.json`. Mostly used to reference `client_id`.
+
+#### Event Callbacks
+- **connected_cb** Asynchronous. Called when connection to broker is estbalished. Recieves the `client` instance as an argument.
+- **disconnected_cb** Called when connection to broker is lost.
+- **subscribe_cb** Called when a message is received that matches topic subscription. Receives arguments `topic`, `message`, and `retained`.
+
+#### Topic Subscription
+Recommended approach for subscribing to topics:
+```py filename="client.py"
+from node import NodeCore
+
+class NodeClient(NodeCore):
+    
+    async def connected_cb(self, client):
+        # Subscribe to topic once MQTT broker connection is established
+        await client.subscribe('foo_topic')
+```
+
+#### Examples
+View `client.py` examples in the [repository's example directory](https://github.com/huebot-iot/node/tree/main/examples)
+
+### boot.py
+This is an optional file that will be the first script executed when the MCU boots up. It has minimal use cases but, if implemented, should be kept pretty light weight.  
