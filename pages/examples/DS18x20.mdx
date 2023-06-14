@@ -1,0 +1,70 @@
+# DS18x20 Temperature Sensor
+
+import { Callout } from 'nextra/components'
+
+<Callout  type="warning" emoji="⚠️">
+    Examples do not cover hub or node setup. Please make sure that the respective guides have been followed before continuing. 
+</Callout>
+
+## Overview
+Once a connection with the MQTT broker is established, the MCU starts publishing DS18x20 temperature sensor readings on a specified interval (15 seconds).
+
+## Supplies
+*Note: the below products link to Amazon out of convenience, but feel free to procure from wherever you'd like!*
+
+* 1 [Breadboard](https://www.amazon.com/Pcs-MCIGICM-Points-Solderless-Breadboard/dp/B07PCJP9DY/ref=sr_1_3?crid=1DR72H2H83OT3&keywords=breadboard&qid=1686764491&sprefix=breadboard%2Caps%2C100&sr=8-3)
+* 2 [Jumper wire cables](https://www.amazon.com/dp/B081GMJVPB/ref=sspa_dk_detail_0?ie=UTF8&psc=1&pd_rd_i=&pd_rd_i=B081GMJVPBp13NParams&s=pc&sp_csd=d2lkZ2V0TmFtZT1zcF9kZXRhaWxfdGhlbWF0aWM)
+* 1 [DS18x20 Temperature Sensor](https://www.amazon.com/BOJACK-DS18B20-Temperature-Stainless-Waterproof/dp/B09NVFJYPS/ref=sr_1_10?crid=2GFIV3PPTXDBQ&keywords=ds18x20+temperature+sensor&qid=1686766527&sprefix=ds18x20+temperature+sensor%2Caps%2C93&sr=8-10)
+* 1 [4.7k Ω resistor](https://www.amazon.com/EDGELEC-Resistor-Tolerance-Multiple-Resistance/dp/B07QJB3LGN/ref=sr_1_3?crid=MMJG3XMC1JWT&keywords=4.7+k+ohm+resistor&qid=1686766820&s=industrial&sprefix=4.7+k+ohm+resistor%2Cindustrial%2C131&sr=1-3)
+
+## Wiring Diagram
+![DS18x20](https://github.com/huebot-iot/docs/assets/8736328/ba2123db-d0ba-41fa-9680-260e91efc712)
+
+## client.py
+
+```py filename="client.py"
+import machine
+import onewire 
+import ds18x20
+import uasyncio as asyncio
+
+from node import NodeCore
+
+# VARIABLES
+DATA_PIN = 4
+PUBLISH_INTERVAL = 15 
+
+class NodeClient(NodeCore):
+    _pin = machine.Pin(DATA_PIN)
+    _node = ds18x20.DS18X20(onewire.OneWire(_pin))
+
+    async def connected_cb(self, client):
+        asyncio.create_task(self.get_temperature())
+
+    async def get_temperature(self):
+        while True: 
+            roms = NodeClient._node.scan()
+            NodeClient._node.convert_temp()
+            
+            for rom in roms:
+                temp = NodeClient._node.read_temp(rom)
+
+                if isinstance(temp, float):
+                    measurement = round(temp, 2)
+                    await self.client.publish(f"sensor/{self.config['client_id']}", f"{measurement}")
+                else:
+                    await self.client.publish(f"sensor/{self.config['client_id']}", "0.0")
+
+            await asyncio.sleep(PUBLISH_INTERVAL)
+```
+
+## REST API
+
+Sensor readings can be obtained via the REST API:
+
+```sh
+ curl -X GET http://[computer name OR IP address]/node/sensor \
+ -H "Content-Type: application/json" \
+ -H "Authorization: Bearer [access token]"
+ -d '{"client_id": "client_id" }'
+```
