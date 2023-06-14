@@ -11,7 +11,7 @@ const config: DocsThemeConfig = {
     <>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta property="og:title" content="Huebot Documentation" />
-      <meta property="og:description" content="An IoT Framework" />
+      <meta property="og:description" content="A turnkey MQTT-enabled IoT Framework" />
       <link rel="shortcut icon" type="image/x-icon" href="/static/favicon.ico" />
     </>
   ),
