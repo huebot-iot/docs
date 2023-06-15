@@ -18,7 +18,7 @@ This is a basic example which blinks an LED when connection has been established
 * 1 [220Ω resistor](https://www.amazon.com/EDGELEC-Resistor-Tolerance-Multiple-Resistance/dp/B07QK9ZBVZ/ref=sr_1_3?keywords=220+ohm+resistor&qid=1686764719&sprefix=220+o%2Caps%2C138&sr=8-3)
 
 ## Wiring Diagram
-![blink_led_bb](https://github.com/huebot-iot/docs/assets/8736328/a157ccdd-a23f-4996-893a-aff9c32cc26e)
+![blink_led_bb](https://github.com/huebot-iot/docs/assets/8736328/ad1e85d1-a8a4-43a8-aa20-fc11f28c1b0b)
 
 ## client.py
 
@@ -33,8 +33,8 @@ class NodeClient(NodeCore):
 
     async def connected_cb(self, client):
         while True:
-            NodeClient.led.value(0)
+            NodeClient.led.value(1)
             await asyncio.sleep(.5)      
-            NodeClient.led.value(1)  
+            NodeClient.led.value(0)  
             await asyncio.sleep(.5) 
 ```
